@@ -2,25 +2,25 @@
 
 Proxmox VE automation toolkit — API scripts, LXC templates, backup automation, VM provisioning, and management utilities.
 
-## [FOLDER] Structure
+## Structure
 
 ```
 proxmox-homelab-toolkit/
 +-- scripts/
-|   +-- vm-create.sh       # Create VMs via Proxmox API
-|   +-- vm-backup.sh       # Automated VM/LXC backup with retention
-|   +-- lxc-create.sh      # Create LXC containers
-|   +-- proxmox_api.py     # Python Proxmox API wrapper
-|   `-- lxc-template.yml   # Cloud-init LXC template
+| +-- vm-create.sh # Create VMs via Proxmox API
+| +-- vm-backup.sh # Automated VM/LXC backup with retention
+| +-- lxc-create.sh # Create LXC containers
+| +-- proxmox_api.py # Python Proxmox API wrapper
+| `-- lxc-template.yml # Cloud-init LXC template
 +-- templates/
-|   `-- lxc-template.yml   # Documented LXC cloud-init template
+| `-- lxc-template.yml # Documented LXC cloud-init template
 +-- backup/
-|   `-- backup-script.sh   # Automated vzdump backup script
+| `-- backup-script.sh # Automated vzdump backup script
 `-- docs/
-    `-- api-reference.md   # API reference documentation
+ `-- api-reference.md # API reference documentation
 ```
 
-## [ROCKET] Quick Start
+## Quick Start
 
 ```bash
 # Clone the repo
@@ -37,7 +37,7 @@ export PROXMOX_TOKEN="USER@REALM!TOKENID=TOKENVALUE"
 export PROXMOX_VERIFY_SSL=false
 ```
 
-## [MEMO] Contents
+## Contents
 
 ### Bash Scripts
 - **`scripts/vm-create.sh`** — Create VMs via Proxmox API with customizable specs (memory, cores, disk, ISO, network)
@@ -51,7 +51,7 @@ export PROXMOX_VERIFY_SSL=false
 ### Templates
 - **`templates/lxc-template.yml`** — Documented LXC cloud-init template with example `pct create` command
 
-## [WRENCH] Configuration
+## Configuration
 
 All scripts use environment variables for authentication:
 
@@ -59,37 +59,37 @@ All scripts use environment variables for authentication:
 export PROXMOX_HOST="proxmox.example.com"
 export PROXMOX_USER="root@pam"
 export PROXMOX_TOKEN="root@pam!token-name=xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-export PROXMOX_VERIFY_SSL=false  # Set to true for valid certs
+export PROXMOX_VERIFY_SSL=false # Set to true for valid certs
 ```
 
-## [KEY] Getting a Proxmox API Token
+## Getting a Proxmox API Token
 
 1. Log into Proxmox Web UI
 2. Go to **Datacenter → Permissions → API Tokens**
 3. Click **Add** → Enter token name → Set privileges
 4. Copy the token (format: `USER@REALM!TOKENID=TOKENVALUE`)
 
-## [MEMO] Examples
+## Examples
 
 ### Create a new VM
 ```bash
 ./scripts/vm-create.sh \
-  --name ubuntu-vm \
-  --memory 4096 \
-  --cores 4 \
-  --disk 50 \
-  --iso local:iso/ubuntu-22.04-server-amd64.iso \
-  --bridge vmbr0
+ --name ubuntu-vm \
+ --memory 4096 \
+ --cores 4 \
+ --disk 50 \
+ --iso local:iso/ubuntu-22.04-server-amd64.iso \
+ --bridge vmbr0
 ```
 
 ### Create an LXC container
 ```bash
 ./scripts/lxc-create.sh \
-  --name web-server \
-  --memory 1024 \
-  --cores 2 \
-  --disk 10 \
-  --template debian-12-standard
+ --name web-server \
+ --memory 1024 \
+ --cores 2 \
+ --disk 10 \
+ --template debian-12-standard
 ```
 
 ### Run automated backups
@@ -105,12 +105,12 @@ from scripts.proxmox_api import ProxmoxAPI
 api = ProxmoxAPI("proxmox.example.com", "root@pam", "TOKEN")
 nodes = api.get_nodes()
 for node in nodes:
-    vms = api.get_vms(node["node"])
-    for vm in vms:
-        print(f"{vm['name']}: {vm['status']}")
+ vms = api.get_vms(node["node"])
+ for vm in vms:
+ print(f"{vm['name']}: {vm['status']}")
 ```
 
-## [HANDSHAKE] Contributing
+## Contributing
 
 Contributions are welcome! Please:
 - Keep scripts in English
@@ -118,6 +118,6 @@ Contributions are welcome! Please:
 - Document all parameters
 - Test before submitting
 
-## [SCROLL] License
+## License
 
-MIT License — see [LICENSE](LICENSE) for details.
+MIT License — see (LICENSE) for details.
