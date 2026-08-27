@@ -65,7 +65,7 @@ for id in "${VMID_LIST[@]}"; do
         TYPE="VM"
         NAME=$(qm config "$id" | grep "^name:" | awk '{print $2}' || echo "vm-$id")
     else
-        warn "  ✗ Instance $id not found, skipping"
+        warn "  [FAIL] Instance $id not found, skipping"
         ((FAILED++)) || true
         continue
     fi
@@ -78,18 +78,18 @@ for id in "${VMID_LIST[@]}"; do
     if [[ "$TYPE" == "LXC" ]]; then
         if vzdump "$id" --mode "$MODE" --compress "$COMPRESS" --storage "$BACKUP_DIR" 2>/dev/null; then
             ((BACKED_UP++)) || true
-            log "  ✓ $TYPE $id backup complete"
+            log "  [OK] $TYPE $id backup complete"
         else
             ((FAILED++)) || true
-            warn "  ✗ $TYPE $id backup failed"
+            warn "  [FAIL] $TYPE $id backup failed"
         fi
     else
         if vzdump "$id" --mode "$MODE" --compress "$COMPRESS" --storage "$BACKUP_DIR" 2>/dev/null; then
             ((BACKED_UP++)) || true
-            log "  ✓ $TYPE $id backup complete"
+            log "  [OK] $TYPE $id backup complete"
         else
             ((FAILED++)) || true
-            warn "  ✗ $TYPE $id backup failed"
+            warn "  [FAIL] $TYPE $id backup failed"
         fi
     fi
 done
@@ -100,7 +100,7 @@ find "$BACKUP_DIR" -name "*.vma.*" -mtime +"$RETENTION_DAYS" -delete 2>/dev/null
 
 # Notify via Telegram
 if [[ "$NOTIFY_TELEGRAM" == true ]]; then
-    MESSAGE="🗄️ <b>Backup Complete</b>
+    MESSAGE="[CABINET] <b>Backup Complete</b>
     
 Instances backed up: <b>$BACKED_UP</b>
 Failed: <b>$FAILED</b>

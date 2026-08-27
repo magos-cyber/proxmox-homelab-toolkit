@@ -147,10 +147,10 @@ cmd_health() {
     echo "=== Cluster Health Check ==="
     
     if [[ "$all_healthy" == true ]]; then
-        echo "  ${GREEN}✓ All checks passed - Cluster is healthy${NC}"
+        echo "  ${GREEN}[OK] All checks passed - Cluster is healthy${NC}"
         success "Cluster health check passed"
     else
-        echo "  ${RED}✗ Health issues detected:${NC}"
+        echo "  ${RED}[FAIL] Health issues detected:${NC}"
         for issue in "${issues[@]}"; do
             echo "    - ${RED}$issue${NC}"
         done
