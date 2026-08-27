@@ -1,0 +1,66 @@
+# Proxmox LXC Cloud-Init Template
+# Usage: 
+#   1. Download a Debian cloud image
+#   2. Create container from this template
+#   3. Apply cloud-init config
+
+# ---- Template Metadata ----
+template:
+  name: debian-12-cloudinit
+  description: "Debian 12 LXC template with cloud-init"
+  os: debian
+  version: "12"
+
+# ---- LXC Container Defaults ----
+container:
+  # Base settings
+  arch: amd64
+  cores: 2
+  memory: 2048          # MB
+  swap: 512             # MB
+  disk_size: 20         # GB
+  storage: local-lvm
+  bridge: vmbr0
+  ip_config: dhcp
+  
+  # Security
+  unprivileged: true
+  nesting: true         # Needed for Docker-in-LXC
+  features:
+    - keyctl: 1
+    - nesting: 1
+  
+  # Mount points (optional)
+  mounts:
+    - mp0: /mnt/storage,mp=/mnt/storage
+
+# ---- Cloud-Init Configuration ----
+cloud_init:
+  user: admin
+  password: changeme    # CHANGE THIS
+  ssh_public_keys:
+    - ssh-ed25519 AAAA... your-key-here
+  packages:
+    - curl
+    - wget
+    - git
+    - vim
+    - htop
+    - fail2ban
+    - ufw
+  runcmd:
+    - timedatectl set-timezone Europe/Athens
+    - systemctl enable fail2ban
+    - ufw default deny incoming
+    - ufw allow ssh
+    - ufw --force enable
+
+# ---- Example: Create LXC from CLI ----
+# pct create 100 local:vztmpl/debian-12-standard_*.tar.zst \
+#   --cores 2 --memory 2048 --swap 512 \
+#   --rootfs local-lvm:20 \
+#   --net0 name=eth0,bridge=vmbr0,ip=dhcp \
+#   --unprivileged 1 \
+#   --features keyctl=1,nesting=1 \
+#   --password changeme \
+#   --ssh-public-keys /root/.ssh/id_ed25519.pub
